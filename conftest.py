@@ -121,15 +121,15 @@ def pytest_sessionfinish(session, exitstatus):
 
 @pytest.marker.trylast
 def pytest_unconfigure():
-     # I close all ssh connection here
-     print("Enter `pytest_unconfigure`. Show some system information")
+    # I close all ssh connection here
+    print("Enter `pytest_unconfigure`. Show some system information")
 
-     import time
-     import os
-     for _ in range(10):
-         os.system("ps aux --sort pmem")
-         print("=" * 80)
-         time.sleep(30)
+    import time
+    import os
+    for _ in range(10):
+        os.system("ps aux --sort pmem")
+        print("=" * 80)
+        time.sleep(30)
 
     print("Leave `pytest_unconfigure`.")
 
