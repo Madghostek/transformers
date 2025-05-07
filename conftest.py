@@ -119,8 +119,8 @@ def pytest_sessionfinish(session, exitstatus):
 
     print("Leave `pytest_sessionfinish`.")
 
-@pytest.marker.trylast
 def pytest_unconfigure():
+
     # I close all ssh connection here
     print("Enter `pytest_unconfigure`. Show some system information")
 
