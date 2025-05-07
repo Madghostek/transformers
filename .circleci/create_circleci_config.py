@@ -34,7 +34,7 @@ COMMON_ENV_VARIABLES = {
 # Disable the use of {"s": None} as the output is way too long, causing the navigation on CircleCI impractical
 # Disable `"vvv"` for now to see if we could avoid ``
 # TODO: revise this around 2025/06 or once we see another `Too long with no output (exceeded 10m0s): context deadline exceeded`
-COMMON_PYTEST_OPTIONS = {"max-worker-restart": 0, "rsfE":None}
+COMMON_PYTEST_OPTIONS = {"max-worker-restart": 0, "vvv": None, "rsfE":None}
 DEFAULT_DOCKER_IMAGE = [{"image": "cimg/python:3.8.12"}]
 
 # Strings that commonly appear in the output of flaky tests when they fail. These are used with `pytest-rerunfailures`
@@ -174,7 +174,7 @@ class CircleCIJob:
             {"run": {"name": "Create `test-results` directory", "command": "mkdir test-results"}},
             {"run": {"name": "Get files to test", "command":f'curl -L -o {self.job_name}_test_list.txt <<pipeline.parameters.{self.job_name}_test_list>> --header "Circle-Token: $CIRCLE_TOKEN"' if self.name != "pr_documentation_tests" else 'echo "Skipped"'}},
                         {"run": {"name": "Split tests across parallel nodes: show current parallel tests",
-                    "command": f"TESTS=$(circleci tests split  --split-by=timings {self.job_name}_test_list.txt) && echo $TESTS > splitted_tests.txt && echo $TESTS | tr ' ' '\n'" if self.parallelism else f"awk '{{printf \"%s \", $0}}' {self.job_name}_test_list.txt > splitted_tests.txt"
+                    "command": f"TESTS=$(circleci tests split  --split-by=timings {self.job_name}_test_list.txt) && echo $TESTS > splitted_tests_2.txt && echo $TESTS | tr ' ' '\n'" if self.parallelism else f"awk '{{printf \"%s \", $0}}' {self.job_name}_test_list.txt > splitted_tests.txt"
                     }
             },
             {"run": {"name": "fetch hub objects before pytest", "command": "python3 utils/fetch_hub_objects_for_ci.py"}},
