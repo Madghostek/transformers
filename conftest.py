@@ -98,18 +98,40 @@ def pytest_addoption(parser):
 
 
 def pytest_terminal_summary(terminalreporter):
+
+    print("Enter `pytest_terminal_summary`.")
+
     from transformers.testing_utils import pytest_terminal_summary_main
 
     make_reports = terminalreporter.config.getoption("--make-reports")
     if make_reports:
         pytest_terminal_summary_main(terminalreporter, id=make_reports)
 
+    print("Leave `pytest_terminal_summary`.")
 
 def pytest_sessionfinish(session, exitstatus):
     # If no tests are collected, pytest exists with code 5, which makes the CI fail.
+
+    print("Enter `pytest_sessionfinish`.")
+
     if exitstatus == 5:
         session.exitstatus = 0
 
+    print("Leave `pytest_sessionfinish`.")
+
+@pytest.marker.trylast
+def pytest_unconfigure():
+     # I close all ssh connection here
+     print("Enter `pytest_unconfigure`. Show some system information")
+
+     import time
+     import os
+     for _ in range(10):
+         os.system("ps aux --sort pmem")
+         print("=" * 80)
+         time.sleep(30)
+
+    print("Leave `pytest_unconfigure`.")
 
 # Doctest custom flag to ignore output.
 IGNORE_RESULT = doctest.register_optionflag("IGNORE_RESULT")
