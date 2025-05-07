@@ -126,10 +126,11 @@ def pytest_unconfigure():
 
     import time
     import os
-    for _ in range(10):
-        os.system("ps aux --sort pmem")
-        print("=" * 80)
+    import subprocess
+    for _ in range(1):
         time.sleep(30)
+        subprocess.run(args=["ps", "aux", "--sort", "pmem"], env={"COLUMNS": "320", "LINES": "300"})
+        print("=" * 80)
 
     print("Leave `pytest_unconfigure`.")
 
